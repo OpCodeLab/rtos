@@ -31,11 +31,11 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-//#define APK1
+#define APK1
 //#define APK2
 //#define APK3
 //#define APK4
-#define APK5
+//#define APK5
 
 /* USER CODE END Includes */
 
