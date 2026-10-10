@@ -102,7 +102,7 @@ void Task1(void *p) //P1
 
   while(1)
   {
-    printf("TAsk 1 is running....\n");
+	  LOG_INFO(COLOR_WHITE,"TAsk 1 is running....\n");
     HAL_GPIO_TogglePin(GPIOD,GPIO_PIN_12);
     vTaskDelay(1000);
   }
@@ -150,14 +150,15 @@ void Task3(void *p) // P4
     xQueueReceive(Queue1, &PulseWidth, portMAX_DELAY );
     if( (PulseWidth<=400) && (PulseWidth>100))
     {
-      printf("Short Button detected ...\n");
+    	LOG_INFO(COLOR_YELLOW,"Short Button detected ...");
       /*Start Timer */
       xTimerStart(sTim,0);
 
     }
     else if (PulseWidth>400)
     {
-     printf("Long Button detected ...\n");
+ 	LOG_INFO(COLOR_YELLOW,"Long Button detected ...");
+
      /*Start Timer */
      xTimerStop(sTim,0);
 
@@ -178,7 +179,9 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 /*Timer Callback*/
 void vTimerCallback( TimerHandle_t xTimer )
  {
-   printf("Timer is Running \n");
+ 	LOG_INFO(COLOR_GREEN,"Timer is Running ");
+
+
 
  }
 

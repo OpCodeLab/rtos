@@ -186,7 +186,9 @@ static void MX_USART3_UART_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN USART3_Init 2 */
-
+  /* USER CODE BEGIN USART2_Init 2 */
+  HAL_NVIC_SetPriority(USART3_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(USART3_IRQn);
   /* USER CODE END USART3_Init 2 */
 
 }

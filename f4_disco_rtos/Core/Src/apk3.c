@@ -91,6 +91,7 @@ void Task1(void *p) //P1
 
   while(1)
   {
+    LOG_INFO(COLOR_WHITE,"TAsk 1 is running....\n");
     HAL_GPIO_TogglePin(GPIOD,GPIO_PIN_12);
     vTaskDelay(1000);
   }
@@ -161,11 +162,15 @@ void Task4(void *p) // P4
 	    }
 	    else if( ( uxBits & BIT_0 ) != 0 )
 	    {
-          printf("SHORT button");
+	    	LOG_INFO(COLOR_YELLOW,"Short Button detected ...");
+
+
 	    }
 	    else if( ( uxBits & BIT_4 ) != 0 )
 	    {
-	          printf("LONG button");
+	    	LOG_INFO(COLOR_YELLOW,"Long Button detected ...");
+
+
 	    }
 	    else
 	    {
