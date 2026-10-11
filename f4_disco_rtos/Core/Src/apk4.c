@@ -77,7 +77,7 @@ void run_apk(void)
                      /* The timer period in ticks, must be greater than 0. */
                       100,
                      /* The timers will auto-reload themselves when they expire. */
-                     pdTRUE,
+					  pdFALSE,
                      /* pvTimerID :when the same callback function is assigned to more than one timer */
                      ( void * ) 0,
                      /* callback when it expires. */

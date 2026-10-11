@@ -190,7 +190,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 
   /* Inter-byte timeout : drop a half-received frame */
   now = xTaskGetTickCountFromISR();
-  if ((RxState != WAIT_SOF) && ((now - LastByteTick) > pdMS_TO_TICKS(FRAME_TIMEOUT_MS)))
+  if ((RxState != WAIT_SOF) && ((now - LastByteTick) > FRAME_TIMEOUT_MS))
   {
     RxState = WAIT_SOF;
   }

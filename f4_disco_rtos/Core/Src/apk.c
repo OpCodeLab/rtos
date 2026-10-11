@@ -123,7 +123,7 @@ void vTask2( void * pvParameters )
     	tick++;
     	        LOG_INFO(COLOR_CYAN    ,"<<CONSUMER>> Execution Loop Number %d", (int)tick);
 
-    	        if( xQueueReceive(xQueue_UART, (void *) &data_Rx, portMAX_DELAY) != pdPASS )
+    	        if( xQueueReceive(xQueue_UART, (void *) &data_Rx, 0) != pdPASS )
     	        {
     	            Err_QueuEmpty++;
     	           // LOG_ERROR("<<CONSUMER>> : Queue Empty %d", (int)Err_QueuEmpty);
@@ -133,8 +133,6 @@ void vTask2( void * pvParameters )
     	        counter++;
 
     	        vTaskDelay(Consumer_Period);
-
-
     }
 }
 
