@@ -36,7 +36,9 @@ extern "C" {
 //#define APK3
 //#define APK4
 //#define APK5
-#define APK6
+//#define APK6
+#define APK7
+//#define APK7_EXE   /* student template of APK7 */
 
 /* USER CODE END Includes */
 

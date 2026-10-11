@@ -256,8 +256,9 @@ void SystemTask(void *p)
         xQueueReceive(QueueCmd, &frame, portMAX_DELAY);
         if (frame.cmd != CMD_START_CYCLE)
         {
-          /* a new parameter replaces the old one, the config stays complete */
-          SendFrame(frame.cmd | FRAME_RSP_FLAG, ApplyConfig(&cfg, &frame));
+           status = ApplyConfig(&cfg, &frame);
+           /* a new parameter replaces the old one, the config stays complete */
+          SendFrame(frame.cmd | FRAME_RSP_FLAG, status);
           break;
         }
         if (SensorState == ERROR_STATE)
@@ -266,10 +267,14 @@ void SystemTask(void *p)
           SendFrame(frame.cmd | FRAME_RSP_FLAG, STATUS_DOOR_OPEN);
           break;
         }
+
         SendFrame(frame.cmd | FRAME_RSP_FLAG, STATUS_OK);
+
         LOG_INFO(COLOR_GREEN, "Cycle start: %s, %uC, %u rpm -> RUN_STATE",
                  ProgramName[cfg.program], cfg.temp, cfg.spin * 100u);
+
         HAL_GPIO_WritePin(GPIOD, LED_DONE, GPIO_PIN_RESET);
+
         SysState = RUN_STATE;
         break;
 
