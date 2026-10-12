@@ -37,8 +37,9 @@ extern "C" {
 //#define APK4
 //#define APK5
 //#define APK6
-#define APK7
+//#define APK7
 //#define APK7_EXE   /* student template of APK7 */
+#define APK8       /* functional safety: NORMAL / DEGRADED / SAFE / RESET */
 
 /* USER CODE END Includes */
 

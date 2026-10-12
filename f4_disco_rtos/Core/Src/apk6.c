@@ -381,7 +381,6 @@ static void WaitButtonPress(void)
   (void)xSemaphoreTake(SemDoor, 0);
 }
 
-
 void SensorTask(void *p)
 {
   uint8_t suspended = 0;     /* 1 = this task suspended the SystemTask */
@@ -389,7 +388,6 @@ void SensorTask(void *p)
   while(1)
   {
     WaitButtonPress();
-
     switch (SensorState)
     {
       /* ---- NO_ERROR_STATE : door closed, a press opens it ---- */

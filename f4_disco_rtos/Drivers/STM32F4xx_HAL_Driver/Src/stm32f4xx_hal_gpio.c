@@ -242,8 +242,7 @@ void HAL_GPIO_Init(GPIO_TypeDef  *GPIOx, GPIO_InitTypeDef *GPIO_Init)
 
         temp = SYSCFG->EXTICR[position >> 2U];
         temp &= ~(0x0FU << (4U * (position & 0x03U)));
-        temp |= ((uint32_t)(GPIO_GET_INDEX(GPIOx)) << (4U * (position & 0x03U)));
-        SYSCFG->EXTICR[position >> 2U] = temp;
+        temp |= ((uint32_t)(GPIO_GET_INDEX(GPIOx)) << (4U * (position & 0x03U)));        SYSCFG->EXTICR[position >> 2U] = temp;
 
         /* Clear Rising Falling edge configuration */
         temp = EXTI->RTSR;

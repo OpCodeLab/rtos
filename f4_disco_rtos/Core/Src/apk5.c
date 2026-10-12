@@ -125,12 +125,13 @@ void LinkLayer(void *p)
     /* Blocked until the ISR posts a complete frame */
     xQueueReceive(QueueFrame, &frame, portMAX_DELAY);
 
-    LOG_INFO(COLOR_CYAN, "RX frame CMD=0x%02X DATA=0x%02X", frame.cmd, frame.data);
+   LOG_INFO(COLOR_CYAN, "RX frame CMD=0x%02X DATA=0x%02X", frame.cmd, frame.data);
 
     rspData = DecodeFrame(&frame);
     SendFrame(frame.cmd | FRAME_RSP_FLAG, rspData);
   }
 }
+
 
 
 /* Execute the command, return the DATA byte of the response */
