@@ -150,6 +150,15 @@ static void Actuator_SetHeater(uint8_t power);
 static void Actuator_SetRelay(uint8_t closed);
 static void EnterMode(Mode_t m, uint8_t errBits);
 
+void SafetyManager( void * pvParameters )
+{
+	while(1)
+	{
+
+	}
+
+}
+
 
 void run_apk(void)
 {

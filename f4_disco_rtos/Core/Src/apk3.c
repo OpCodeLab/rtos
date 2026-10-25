@@ -23,6 +23,7 @@
 #include "queue.h"
 #include "semphr.h"
 #include "log.h"
+#include "event_groups.h"
 
 #ifdef APK3
 /* Private variables ---------------------------------------------------------*/

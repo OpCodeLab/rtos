@@ -125,7 +125,7 @@ void LinkLayer(void *p)
     /* Blocked until the ISR posts a complete frame */
     xQueueReceive(QueueFrame, &frame, portMAX_DELAY);
 
-   LOG_INFO(COLOR_CYAN, "RX frame CMD=0x%02X DATA=0x%02X", frame.cmd, frame.data);
+   //LOG_INFO(COLOR_CYAN, "RX frame CMD=0x%02X DATA=0x%02X", frame.cmd, frame.data);
 
     rspData = DecodeFrame(&frame);
     SendFrame(frame.cmd | FRAME_RSP_FLAG, rspData);
@@ -140,7 +140,7 @@ static uint8_t DecodeFrame(const Frame_t *pFrame)
   switch (pFrame->cmd)
   {
     case CMD_PING:
-      return pFrame->data;
+      return (pFrame->data+1);
 
     case CMD_LED_SET:
       for (uint8_t i = 0; i < 4; i++)
@@ -213,6 +213,8 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
       RxFrame.data = RxByte;
       /* Frame complete -> hand it to the LinkLayer task */
       xQueueSendFromISR(QueueFrame, &RxFrame, &xHigherPriority);
+
+
       RxState = WAIT_SOF;
       break;
 

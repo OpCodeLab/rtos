@@ -41,7 +41,11 @@ extern "C" {
 //#define APK7_EXE   /* student template of APK7 */
 //#define APK8       /* functional safety: NORMAL / DEGRADED / SAFE / RESET */
 //#define APK9       /* simple safety: NORMAL / SAFE */
-#define APK10      /* APK9 + test driven development (tests/apk10) */
+//#define APK10      /* APK9 + test driven development (tests/apk10) */
+//#define APK11      /* signal processing: UART samples, double buffer, FFT task */
+//#define APK12      /* APK11 simplified: double buffer + CMSIS-DSP FFT (arm_rfft_fast_f32) */
+#define APK14      /* APK12 + sensor AutoTest at start-up, SAFE mode, SupervisorTask */
+//#define APK15      /* APK12 with two sensors: StoreSample dispatch, FftSensor1 + FftSensor2 */
 
 /* USER CODE END Includes */
 

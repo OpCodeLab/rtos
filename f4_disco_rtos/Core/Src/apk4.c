@@ -75,7 +75,7 @@ void run_apk(void)
   sTim= xTimerCreate
                    ( "STimer",
                      /* The timer period in ticks, must be greater than 0. */
-                      100,
+                      400,
                      /* The timers will auto-reload themselves when they expire. */
 					  pdFALSE,
                      /* pvTimerID :when the same callback function is assigned to more than one timer */
@@ -130,6 +130,8 @@ void Task2(void *p) // P3
    while( HAL_GPIO_ReadPin(GPIO_BT,GPIO_PIN_BT)==GPIO_PIN_SET );
    SecondTick= xTaskGetTickCount();
    PulseWidth=SecondTick-FirstTick;
+
+
    xQueueSend(Queue1, (void*)&PulseWidth,100);
 
 
@@ -180,8 +182,6 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 void vTimerCallback( TimerHandle_t xTimer )
  {
  	LOG_INFO(COLOR_GREEN,"Timer is Running ");
-
-
 
  }
 

@@ -57,17 +57,14 @@ void run_apk(void)
 {
 
 
-  xUartMutex = xSemaphoreCreateMutex();
+   /*128 word Stack size / No Pamram / Priority=1, init hTask1->TCB1*/
+  xTaskCreate(Task1,"Task1"  ,128, NULL,4,&hTask1);
+  xTaskCreate(Task2,"Task2"  ,128,NULL,3,NULL);
+  xTaskCreate(Task3,"Task3" ,128,NULL,3,NULL);
 
-  /*CreateSemaphore */
-  Sem1= xSemaphoreCreateBinary();
-  /* Create a queue capable of containing 10 unsigned long values. */
-  Queue1 = xQueueCreate( 10, sizeof( uint32_t ) );
+  Queue1 = xQueueCreate(6, sizeof (uint32_t));
+  Sem1 = xSemaphoreCreateBinary();
 
-  /*128 word Stack size / No Pamram / Priority=1, init hTask1->TCB1*/
-  xTaskCreate(Task1,"Periodic"  ,128, NULL,2,&hTask1);
-  xTaskCreate(Task2,"APeriodic"  ,128,NULL,3,NULL);
-  xTaskCreate(Task3,"Processing" ,128,NULL,3,NULL);
   LOG_INFO(COLOR_WHITE," RTOS LAB STARTING-----------------");
 
   vTaskStartScheduler();
@@ -78,35 +75,54 @@ void run_apk(void)
   }
 }
 
-
-
-/*Perdidic Task*/
+uint32_t debounceDelay=40;
+uint32_t counter=0;
+/*Asychrone  Task*/
 void Task1(void *p) //P1
 {
-
+   // int Tab[2000];
   while(1)
   {
-	  LOG_INFO(COLOR_WHITE,"TAsk 1 is running....\n");
-    HAL_GPIO_TogglePin(GPIOD,GPIO_PIN_12);
-    vTaskDelay(1000);
+       xSemaphoreTake(Sem1 , portMAX_DELAY);
+        vTaskDelay(debounceDelay);
+       xSemaphoreTake(Sem1 , 0);
+       counter++;
+
+       HAL_GPIO_TogglePin(GPIOD,GPIO_PIN_12);
+
+
+
   }
 }
+uint32_t ErrFull,ErrEmpty;
+uint32_t ProducerFreq = 500;
+uint32_t ConsumerFreq  = 500;
 
 void Task2(void *p) // P3
 {
   TickType_t  FirstTick,SecondTick;
   uint32_t PulseWidth;
+
+  uint32_t DataTx=0;
+
   while(1)
   {
-   xSemaphoreTake(Sem1,portMAX_DELAY);
-   /*Take the FirstTick*/
-   FirstTick = xTaskGetTickCount();
-   /*While button still forced ...*/
-   while( HAL_GPIO_ReadPin(GPIO_BT,GPIO_PIN_BT)==GPIO_PIN_SET );
-   SecondTick= xTaskGetTickCount();
-   PulseWidth=SecondTick-FirstTick;
-   xQueueSend(Queue1, (void*)&PulseWidth,100);
-   //taskYIELD();
+	//  LOG_INFO(COLOR_WHITE,"TAsk 2 is running....\n");
+    HAL_GPIO_TogglePin(GPIOD,GPIO_PIN_13);
+
+    DataTx++;
+
+
+
+    /*producer */
+    if (xQueueSend(Queue1, (const void *) &DataTx, 0) == pdFALSE)
+    {
+       /*Quue is full*/
+    	ErrFull++;
+    }
+
+    vTaskDelay(ProducerFreq);
+
   }
 }//end task3
 
@@ -116,21 +132,26 @@ void Task2(void *p) // P3
 void Task3(void *p) // P4
 {
   uint32_t PulseWidth;
-
+  uint32_t DataRx=0;
  while(1)
  {
-    // Blocke Task until Queue receive a new data
-    xQueueReceive(Queue1, &PulseWidth, portMAX_DELAY );
-    if( (PulseWidth<=400) && (PulseWidth>100))
-    {
-    	LOG_INFO(COLOR_YELLOW,"Short Button detected ...\n");
-    }
-    else if (PulseWidth>400)
-    {
-    	LOG_INFO(COLOR_YELLOW,"Long Button detected ...\n");
-    }
+	//LOG_INFO(COLOR_WHITE,"TAsk 3 is running....\n");
+   HAL_GPIO_TogglePin(GPIOD,GPIO_PIN_14);
+
+   if (xQueueReceive(Queue1, (void *) &DataRx, portMAX_DELAY) == pdFALSE)
+       {
+          /*Quue is full*/
+       	ErrEmpty++;
+       }
+
+  // vTaskDelay(ConsumerFreq);
+
+
+
  }
 }
+uint32_t debouce=0;
+
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
    BaseType_t xHigherPriority=pdFALSE;
@@ -138,8 +159,17 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
    xSemaphoreGiveFromISR(Sem1, &xHigherPriority);
    /*if True force contex switch else wait for next tick*/
    portYIELD_FROM_ISR(xHigherPriority);
+   debouce++;
 
 }
+
+
+
+
+
+
+
+
 
 
 #endif
